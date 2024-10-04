@@ -4,6 +4,7 @@
 #include <string.h>
 #include <locale.h>
 
+
 struct node {
     char inf[256];          // Данные элемента
     struct node* next;     // Указатель на следующий элемент
@@ -26,6 +27,7 @@ struct node* get_struct(void) {
     scanf("%s", s);
     if (*s == 0) {
         printf("Запись не была произведена\n");
+        free(p); // Освобождаем память, если запись не была произведена
         return NULL;
     }
     strcpy(p->inf, s);
@@ -71,11 +73,39 @@ void review(void) {
 }
 
 int main() {
-    push();
-    push();
-    push();
-    review();
-    pop();
-    review();
+    char choice;
+    setlocale(LC_ALL, "RUS");
+
+    do {
+        printf("Выберите действие:\n");
+        printf("1. Добавить элемент в стек\n");
+        printf("2. Удалить элемент из стека\n");
+        printf("3. Просмотреть содержимое стека\n");
+        printf("4. Выход\n");
+        printf("Ваш выбор: ");
+        scanf(" %c", &choice); // Запрос на выбор действия
+
+        switch (choice) {
+        case '1':
+            push(); // Добавление элемента в стек
+            break;
+        case '2':
+            pop(); // Удаление элемента из стека
+            break;
+        case '3':
+            review(); // Просмотр содержимого стека
+            break;
+        case '4':
+            printf("Выход из программы.\n");
+            break;
+        default:
+            printf("Неверный выбор. Пожалуйста, попробуйте снова.\n");
+        }
+
+        // Очистка буфера ввода
+        while (getchar() != '\n') continue;
+
+    } while (choice != '4'); // Продолжаем, пока пользователь не выберет выход
+
     return 0;
 }

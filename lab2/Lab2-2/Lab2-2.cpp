@@ -6,7 +6,10 @@
 #include <Windows.h> 
 #include <ctime>
 
-const int size = 100000;
+int** s = (int**)malloc(size * sizeof(int*));
+for (i = 0; i < size; i++) {
+    s[i] = (int*)malloc(size * sizeof(int));
+}
 
 int randomArray[size], randomArray2[size], randomArray3[size];
 int increasingArray[size], increasingArray2[size], increasingArray3[size];
@@ -168,6 +171,9 @@ int main() {
     printf("Shell: %lf seconds\n", timeHalfShell);
     printf("Quick Sort: %lf seconds\n", timeHalfQuick);
     printf("QSort: %lf seconds\n\n", timeHalfQSort);
-
+    for (int i = 0; i < size; i++) {
+        free s[i];
+     }
+    free(s);
     return 0;
 }
