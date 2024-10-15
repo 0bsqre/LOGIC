@@ -10,28 +10,33 @@ struct Node {
 };
 
 // Функция для создания дерева
-struct Node* CreateTree(struct Node* root, struct Node* r, int data) {
-    if (r == NULL) {
-        r = (struct Node*)malloc(sizeof(struct Node));
-        if (r == NULL) {
+struct Node* CreateTree(struct Node* root, int data) {
+    // Если дерево пустое, создаем новый узел
+    if (root == NULL) {
+        struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+        if (newNode == NULL) {
             printf("Ошибка выделения памяти");
             exit(0);
         }
-
-        r->left = NULL;
-        r->right = NULL;
-        r->data = data;
-        if (root == NULL) return r;
-
-        if (data > root->data) root->left = r;
-        else root->right = r;
-        return r;
+        newNode->data = data;
+        newNode->left = NULL;
+        newNode->right = NULL;
+        return newNode;
     }
 
-    if (data > r->data)
-        CreateTree(r, r->left, data);
-    else
-        CreateTree(r, r->right, data);
+    // Если значение уже существует, не добавляем его
+    if (data == root->data) {
+        printf("Значение %d уже существует в дереве. Пропускаем добавление.\n", data);
+        return root;
+    }
+
+    // Рекурсивно добавляем в левое или правое поддерево
+    if (data < root->data) {
+        root->left = CreateTree(root->left, data);
+    }
+    else {
+        root->right = CreateTree(root->right, data);
+    }
 
     return root;
 }
@@ -78,7 +83,7 @@ int main() {
             start = 0;
         }
         else {
-            root = CreateTree(root, root, D);
+            root = CreateTree(root, D);
         }
     }
 
