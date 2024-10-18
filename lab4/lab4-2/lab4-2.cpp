@@ -10,28 +10,33 @@ struct Node {
 };
 
 // Функция для создания дерева
-struct Node* CreateTree(struct Node* root, struct Node* r, int data) {
-    if (r == NULL) {
-        r = (struct Node*)malloc(sizeof(struct Node));
-        if (r == NULL) {
+struct Node* CreateTree(struct Node* root, int data) {
+    // Если дерево пустое, создаем новый узел
+    if (root == NULL) {
+        struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+        if (newNode == NULL) {
             printf("Ошибка выделения памяти");
             exit(0);
         }
-
-        r->left = NULL;
-        r->right = NULL;
-        r->data = data;
-        if (root == NULL) return r;
-
-        if (data > root->data) root->left = r;
-        else root->right = r;
-        return r;
+        newNode->data = data;
+        newNode->left = NULL;
+        newNode->right = NULL;
+        return newNode;
     }
 
-    if (data > r->data)
-        CreateTree(r, r->left, data);
-    else
-        CreateTree(r, r->right, data);
+    // Если значение уже существует, не добавляем его
+    if (data == root->data) {
+        printf("Значение %d уже существует в дереве. Пропускаем добавление.\n", data);
+        return root;
+    }
+
+    // Рекурсивно добавляем в левое или правое поддерево
+    if (data < root->data) {
+        root->left = CreateTree(root->left, data);
+    }
+    else {
+        root->right = CreateTree(root->right, data);
+    }
 
     return root;
 }
@@ -51,16 +56,17 @@ void print_tree(struct Node* r, int l) {
     print_tree(r->left, l + 1);
 }
 
-// Функция для подсчёта числа вхождений элемента в дереве
-int count_occurrences(struct Node* root, int value) {
-    if (root == NULL) {
-        return 0;
+// Функция для поиска значения в дереве
+struct Node* search(struct Node* root, int value) {
+    if (root == NULL || root->data == value) {
+        return root;
     }
-    int count = 0;
-    if (root->data == value) {
-        count = 1;
+    if (value < root->data) {
+        return search(root->left, value);
     }
-    return count + count_occurrences(root->left, value) + count_occurrences(root->right, value);
+    else {
+        return search(root->right, value);
+    }
 }
 
 int main() {
@@ -77,16 +83,21 @@ int main() {
             start = 0;
         }
         else {
-            root = CreateTree(root, root, D);
+            root = CreateTree(root, D);
         }
     }
 
     print_tree(root, 0);
 
-    printf("Введите значение для подсчёта вхождений: ");
+    printf("Введите значение для поиска: ");
     scanf("%d", &D);
-    int occurrences = count_occurrences(root, D);
-    printf("Значение %d встречается в дереве %d раз(а).\n", D, occurrences);
+    struct Node* found = search(root, D);
+    if (found != NULL) {
+        printf("Значение %d найдено в дереве.\n", D);
+    }
+    else {
+        printf("Значение %d не найдено в дереве.\n", D);
+    }
 
     return 0;
 }
