@@ -4,6 +4,7 @@
 #include <time.h>
 #include <locale.h>
 
+// Функция для генерации матрицы смежности случайного графа
 void generate_adjacency_matrix(int** matrix, int vertices) {
     for (int i = 0; i < vertices; i++) {
         for (int j = i; j < vertices; j++) {
@@ -18,6 +19,7 @@ void generate_adjacency_matrix(int** matrix, int vertices) {
     }
 }
 
+// Функция для вывода матрицы смежности
 void print_adjacency_matrix(int** matrix, int vertices) {
     printf("Матрица смежности:\n");
     for (int i = 0; i < vertices; i++) {
@@ -28,6 +30,7 @@ void print_adjacency_matrix(int** matrix, int vertices) {
     }
 }
 
+// Функция для вычисления декартова произведения графов
 void cartesian_product(int** g1, int vertices1, int** g2, int vertices2, int*** result, int* result_vertices) {
     *result_vertices = vertices1 * vertices2; // Общее количество вершин в графе G
     *result = (int**)malloc(*result_vertices * sizeof(int*));
@@ -38,16 +41,17 @@ void cartesian_product(int** g1, int vertices1, int** g2, int vertices2, int*** 
         }
     }
 
+    // Заполнение матрицы смежности декартова произведения
     for (int i = 0; i < vertices1; i++) {
         for (int j = 0; j < vertices2; j++) {
             for (int k = 0; k < vertices2; k++) {
                 if (g2[j][k] == 1) {
-                    (*result)[i * vertices2 + j][i * vertices2 + k] = 1; // vk и vl смежны в G2
+                    (*result)[i * vertices2 + j][i * vertices2 + k] = 1; // Вершины из G2 смежны
                 }
             }
             for (int k = 0; k < vertices1; k++) {
                 if (g1[i][k] == 1) {
-                    (*result)[i * vertices2 + k][j * vertices2 + j] = 1; // zi и zj смежны в G1
+                    (*result)[i * vertices2 + j][k * vertices2 + j] = 1; // Вершины из G1 смежны
                 }
             }
         }
