@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <locale.h>
-#include<climits>
+#include <climits>
 #include <queue>
 std::queue <int> Q;
 int** createG(int size) {
